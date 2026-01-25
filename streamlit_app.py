@@ -77,8 +77,9 @@ def apply_custom_css():
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-weight: 800;
+            margin-top: -1rem;
+            margin-bottom: 0.3rem;
             font-family: 'Inter', sans-serif;
             letter-spacing: -1.5px;
         }}
@@ -87,7 +88,7 @@ def apply_custom_css():
             text-align: center;
             color: {StreamlitConfig.COLORS['text_secondary']};
             font-size: 0.95rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
             font-weight: 400;
             letter-spacing: 0.5px;
         }}
