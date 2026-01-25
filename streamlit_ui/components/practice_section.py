@@ -59,7 +59,7 @@ def render_practice_section():
     
     # Compact analysis button
     if st.session_state.uploaded_audio or st.session_state.recording_state == 'recorded':
-        if st.button("� Analyze", use_container_width=True, type="primary"):
+        if st.button("🔍Analyze", use_container_width=True, type="primary"):
             analyze_pronunciation()
 
 
