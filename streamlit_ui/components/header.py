@@ -10,9 +10,9 @@ def render_header():
     """Render the main header section"""
     st.markdown(f"""
         <div class="main-header">
-            🎙️ Sanskrit Voice Bot
+            <span class="header-emoji">🕉️</span><span class="header-text">Sanskrit Voice Bot</span>
         </div>
         <div class="sub-header">
-            Master Sanskrit Pronunciation with AI - Version {AppConfig.VERSION}
+            An AI Tutor That Listens, Learns, and Corrects Sanskrit Speech- Version {AppConfig.VERSION}
         </div>
     """, unsafe_allow_html=True)

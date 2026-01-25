@@ -53,7 +53,7 @@ def apply_custom_css():
     """Apply custom CSS styling with dark modern messaging app design"""
     st.markdown(f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap');
         
         /* Main container styling */
         .main {{
@@ -72,16 +72,28 @@ def apply_custom_css():
         /* Header styling */
         .main-header {{
             text-align: center;
-            background: linear-gradient(135deg, {StreamlitConfig.COLORS['gradient_start']} 0%, {StreamlitConfig.COLORS['gradient_end']} 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
             font-size: 3rem;
             font-weight: 800;
             margin-top: -1rem;
             margin-bottom: 0.3rem;
-            font-family: 'Inter', sans-serif;
             letter-spacing: -1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }}
+        
+        .header-emoji {{
+            font-size: 3rem;
+            filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.5));
+        }}
+        
+        .header-text {{
+            background: linear-gradient(135deg, {StreamlitConfig.COLORS['gradient_start']} 0%, {StreamlitConfig.COLORS['gradient_end']} 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Cinzel', serif;
         }}
         
         .sub-header {{
