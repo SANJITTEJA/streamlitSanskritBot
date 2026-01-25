@@ -2,8 +2,19 @@
 Audio Manager Module for Sanskrit Voice Bot v2
 Handles audio recording, playback, transcription, and word-level audio processing.
 """
-import pygame
-import sounddevice as sd
+# Optional imports for desktop features (not needed for Streamlit)
+try:
+    import pygame
+    HAS_PYGAME = True
+except ImportError:
+    HAS_PYGAME = False
+
+try:
+    import sounddevice as sd
+    HAS_SOUNDDEVICE = True
+except ImportError:
+    HAS_SOUNDDEVICE = False
+
 import scipy.io.wavfile as wav
 import numpy as np
 import requests
@@ -55,6 +66,11 @@ class AudioManager:
         Returns:
             bool: True if initialization successful, False otherwise
         """
+        if not HAS_PYGAME:
+            # Not available in web deployment, that's OK
+            self._initialized = False
+            return False
+        
         try:
             pygame.mixer.init()
             self._initialized = True
@@ -69,7 +85,10 @@ class AudioManager:
     
     def start_recording(self) -> bool:
         """
-        Start audio recording.
+        Start aHAS_SOUNDDEVICE:
+            return False
+            
+        if not udio recording.
         
         Returns:
             bool: True if recording started successfully, False otherwise
@@ -95,7 +114,10 @@ class AudioManager:
         """
         Stop audio recording and prepare for analysis.
         
-        Returns:
+        Retnot HAS_SOUNDDEVICE:
+            return {'success': False, 'error': 'Recording not available in web mode'}
+            
+        if urns:
             Dict containing success status and audio information
         """
         if self._is_recording:

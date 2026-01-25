@@ -1,6 +1,6 @@
 """
 Create a smaller database for Streamlit Cloud deployment
-Keeps only top 5 speakers to stay under 1GB limit
+Keeps only first 100 shlokas from each speaker for fast deployment
 """
 import sys
 from pathlib import Path
@@ -10,19 +10,21 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from database.models import Speaker, Shloka, init_database, get_session
 
-# Speakers to keep (based on previous migration stats):
-# sp001: 11,625 shlokas (548MB) - KEEP
-# sp003: 6,661 shlokas (263MB) - KEEP
-# Total: ~18,286 shlokas (~811MB)
-
-SPEAKERS_TO_KEEP = ['sp001', 'sp003']
+# All 27 speakers, but only 100 shlokas each
+SPEAKERS_TO_KEEP = [f'sp{i:03d}' for i in range(1, 28)]  # sp001 to sp027
+MAX_SHLOKAS_PER_SPEAKER = 100  # Only first 100 shlokas per speaker (~120MB total)
 
 def create_reduced_database():
     """Create smaller database with selected speakers"""
     print("Creating reduced database for Streamlit Cloud...")
     
-    # Get source database
-    source_session = get_session('database/sanskrit_voice_bot.db')
+    # Get source database (full version)
+    source_db = 'database/sanskrit_voice_bot_full.db'
+    if not Path(source_db).exists():
+        print(f"Error: Source database not found at {source_db}")
+        return
+    
+    source_session = get_session(source_db)
     
     # Create new database
     target_db = 'database/sanskrit_voice_bot_cloud.db'
@@ -50,8 +52,8 @@ def create_reduced_database():
         target_session.add(target_speaker)
         target_session.flush()
         
-        # Copy shlokas
-        shlokas = source_session.query(Shloka).filter_by(speaker_id=source_speaker.id).all()
+        # Copy shlokas (limited to first MAX_SHLOKAS_PER_SPEAKER)
+        shlokas = source_session.query(Shloka).filter_by(speaker_id=source_speaker.id).limit(MAX_SHLOKAS_PER_SPEAKER).all()
         for shloka in shlokas:
             new_shloka = Shloka(
                 speaker_id=target_speaker.id,
