@@ -94,12 +94,19 @@ Keep it concise and supportive."""
                 motivation = line.replace('MOTIVATION:', '').strip()
             elif line.startswith('TIPS:'):
                 current_section = 'tips'
+                # Check if tips are on the same line as TIPS:
+                tip_content = line.replace('TIPS:', '').strip()
+                if tip_content:
+                    tips.append(tip_content)
             elif current_section == 'feedback' and line:
                 feedback += ' ' + line
             elif current_section == 'motivation' and line:
                 motivation += ' ' + line
-            elif current_section == 'tips' and (line.startswith('-') or line.startswith('•') or line.startswith('*')):
-                tips.append(line.lstrip('-•* '))
+            elif current_section == 'tips' and line:
+                # Accept any line format: bullets, numbers, or plain text
+                cleaned = line.lstrip('-•*0123456789.) ')
+                if cleaned:
+                    tips.append(cleaned)
         
         return {
             'feedback': feedback,
