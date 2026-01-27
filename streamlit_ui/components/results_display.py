@@ -52,11 +52,34 @@ def render_results_display():
     
     # Compact LLM feedback
     if results.get('llm_feedback'):
-        with st.expander("💡 AI Feedback", expanded=False):
+        with st.expander("💡 AI Feedback", expanded=True):
             feedback = results['llm_feedback']
+            
+            # Main feedback
             st.markdown(f"""
-                <div style="font-size: 0.9rem; color: #94a3b8; line-height: 1.5;">
-                    {feedback.get('analysis', '')}<br/><br/>
-                    <em style="color: #6366f1;">{feedback.get('motivation', '')}</em>
+                <div style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 12px;">
+                    {feedback.get('analysis', '')}
                 </div>
             """, unsafe_allow_html=True)
+            
+            # Motivation
+            if feedback.get('motivation'):
+                st.markdown(f"""
+                    <div style="font-size: 0.9rem; color: #a78bfa; font-style: italic; margin-bottom: 12px;">
+                        💜 {feedback.get('motivation', '')}
+                    </div>
+                """, unsafe_allow_html=True)
+            
+            # Practice tips
+            if feedback.get('practice_tips'):
+                st.markdown("""
+                    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px;">
+                        <strong>Practice Tips:</strong>
+                    </div>
+                """, unsafe_allow_html=True)
+                for tip in feedback.get('practice_tips', []):
+                    st.markdown(f"""
+                        <div style="font-size: 0.85rem; color: #94a3b8; padding-left: 12px;">
+                            • {tip}
+                        </div>
+                    """, unsafe_allow_html=True)
