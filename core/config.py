@@ -79,9 +79,9 @@ class AnalysisConfig:
         try:
             GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
         except:
-            GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
+            GEMINI_API_KEY = "AIzaSyBCyh3kVJIcBMbS_5LdIS12MR3BIPbA7lM"
     else:
-        GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
+        GEMINI_API_KEY = "AIzaSyBCyh3kVJIcBMbS_5LdIS12MR3BIPbA7lM"
     
     GEMINI_MODEL = "gemini-2.5-flash"  # Use the newer model with better quotas
     USE_LLM_FEEDBACK = True
