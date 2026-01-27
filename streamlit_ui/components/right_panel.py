@@ -3,8 +3,6 @@ Right Panel Component for Streamlit UI
 Minimalist single-tile design
 """
 import streamlit as st
-from streamlit_ui.components.shloka_display import render_shloka_display
-from streamlit_ui.components.audio_controls import render_audio_controls
 from streamlit_ui.components.practice_section import render_practice_section
 from streamlit_ui.components.results_display import render_results_display
 

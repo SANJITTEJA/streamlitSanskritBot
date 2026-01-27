@@ -15,17 +15,15 @@ sys.path.insert(0, str(v2_path))
 
 from core.config import AudioConfig, AnalysisConfig
 from audio.audio_manager import AudioManager
-from analysis.pronunciation_analyzer import PronunciationAnalyzer
 from analysis.feedback_generator import FeedbackGenerator
 
 
 class StreamlitBackend:
-    """Backend integration for Streamlit app - uses same logic as tkinter app"""
+    """Backend integration for Streamlit app"""
     
     def __init__(self):
-        """Initialize backend components - SAME as tkinter app"""
+        """Initialize backend components"""
         self.audio_manager = AudioManager()
-        self.pronunciation_analyzer = PronunciationAnalyzer()
         self.feedback_generator = FeedbackGenerator()
         self.audio_manager.initialize()
     

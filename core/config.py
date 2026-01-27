@@ -94,57 +94,6 @@ class AnalysisConfig:
     # LLM timeouts and circuit breaker
     LLM_TIMEOUT = 30
     MAX_RETRIES = 3
-    CIRCUIT_BREAKER_THRESHOLD = 5
-
-
-class UIConfig:
-    """UI styling and layout configuration"""
-    
-    # Color scheme - Attractive, Light & Subtle
-    COLORS = {
-        'primary': '#6B73FF',        
-        'secondary': '#9BB5FF',      
-        'success': '#00C896',    
-        'error': '#FF6B9D',        
-        'warning': '#FFB800',   
-        'info': "#000000",     
-        'accent': '#C77DFF',      
-        'muted': '#A8B2D1',        
-        'background': "#ffffff",   
-        'card_bg': '#aee1ed',   
-        'hover': '#E8EDFF',        
-        'border': '#E1E8F0',         
-        'text_primary': '#2D3748',  
-        'text_secondary': '#718096', 
-        'white': '#F5F3F0',          
-        'black': '#2D3748',
-        'dark_green': '#00C896',    
-        'purple': '#C77DFF',
-        'light_blue': "#c6eef7", 
-        'light_red': '#ffb3ba',     # Light red for disabled states
-        'light_green': '#baffc9',   # Light green for enabled states
-        # LLM feedback colors
-        'feedback_bg': '#e6f7ff',
-        'suggestion_bg': '#f0f4f9',
-        'motivation_bg': '#f0fff4',
-        'highlight_text': '#6341c9',
-        'highlight_bg': '#f9f5ff',       
-    }
-    
-    # Font configuration
-    FONTS = {
-        'title': ("Montserrat", 28, "bold"),
-        'subtitle': ("Arial", 14),
-        'header': ("Arial", 14, "bold"),
-        'subheader': ("Arial", 12, "bold"),
-        'normal': ("Arial", 11),
-        'small': ("Arial", 10),
-        'small_bold': ("Arial", 10, "bold"),
-        'tiny': ("Arial", 9),
-        'tiny_bold': ("Arial", 9, "bold"),
-        'devanagari': ("Arial Unicode MS", 22, "bold"),
-        'slp1': ("Arial", 18, "italic")
-    }
 
 
 class PracticeConfig:
