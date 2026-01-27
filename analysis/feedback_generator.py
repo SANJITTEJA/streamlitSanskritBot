@@ -59,9 +59,9 @@ Provide brief, encouraging feedback in this exact format:
 
 FEEDBACK: [2-3 sentences about their performance and specific areas to improve]
 
-MOTIVATION: [1 encouraging sentence to keep them practicing]
+MOTIVATION: [2 encouraging sentence to keep them practicing]
 
-TIPS: [2-3 short practice tips as bullet points]
+TIPS: [2-3 lines about their oral positioning and breathing techniques]
 
 Keep it concise and supportive."""
 
