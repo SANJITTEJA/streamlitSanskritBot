@@ -43,7 +43,7 @@ def render_results_display():
             for word in results['incorrect_words']:
                 st.markdown(f"""
                     <div style="font-size: 0.9rem; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <span style="color: #f1f5f9;">**{word.get('devanagari', word.get('original', ''))}**</span><br/>
+                        <span style="color: #f1f5f9; font-weight: bold;">{word.get('devanagari', word.get('original', ''))}</span><br/>
                         <span style="color: #94a3b8; font-size: 0.85rem;">
                             Expected: {word.get('slp1', word.get('original', ''))} | You said: {word.get('user', '')}
                         </span>
