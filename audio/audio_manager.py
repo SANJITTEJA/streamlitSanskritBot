@@ -55,7 +55,7 @@ class AudioManager:
                     'response_format': (None, 'json')
                 }
                 
-                response = requests.post(AudioConfig.GROQ_API_URL, headers=headers, files=files)
+                response = requests.post(AudioConfig.GROQ_API_URL, headers=headers, files=files, timeout=30)
                 
                 # Clean up temp file
                 temp_file_path = Path(temp_file.name)

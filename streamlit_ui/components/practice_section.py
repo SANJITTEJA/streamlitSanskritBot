@@ -1,6 +1,6 @@
 """
 Practice Section Component
-Handles recording, file upload, and analysis controls
+Handles recording, file upload, and analysis controls with multiple practice modes
 """
 import streamlit as st
 import base64
@@ -9,7 +9,58 @@ from streamlit_ui.backend_integration import get_backend
 
 
 def render_practice_section():
-    """Render compact practice section"""
+    """Render practice section based on selected mode"""
+    
+    # Practice mode selector
+    st.markdown("### 🎯 Practice Mode")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("📖 Full Shloka", 
+                    use_container_width=True,
+                    type="primary" if st.session_state.practice_mode == 'full' else "secondary"):
+            st.session_state.practice_mode = 'full'
+            st.rerun()
+    
+    with col2:
+        if st.button("🎯 Word Practice", 
+                    use_container_width=True,
+                    type="primary" if st.session_state.practice_mode == 'word' else "secondary"):
+            if not st.session_state.get('words_to_practice'):
+                st.warning("⚠️ Complete a full shloka practice first to identify words needing practice!")
+            else:
+                st.session_state.practice_mode = 'word'
+                st.rerun()
+    
+    with col3:
+        if st.button("🔤 Alphabet", 
+                    use_container_width=True,
+                    type="primary" if st.session_state.practice_mode == 'alphabet' else "secondary"):
+            st.session_state.practice_mode = 'alphabet'
+            st.rerun()
+    
+    st.markdown("---")
+    
+    # Render appropriate practice interface based on mode
+    if st.session_state.practice_mode == 'word':
+        from streamlit_ui.components.word_practice import render_word_practice
+        render_word_practice()
+    elif st.session_state.practice_mode == 'alphabet':
+        from streamlit_ui.components.alphabet_practice import render_alphabet_practice
+        render_alphabet_practice()
+    else:
+        # Full shloka practice
+        render_full_shloka_practice()
+
+
+def render_full_shloka_practice():
+    """Render full shloka practice interface"""
+    
+    # Compact tabs for recording/upload
+    tab1, tab2 = st.tabs(["🎤 Record", "📁 Upload"])
+def render_full_shloka_practice():
+    """Render full shloka practice interface"""
     
     # Compact tabs for recording/upload
     tab1, tab2 = st.tabs(["🎤 Record", "📁 Upload"])

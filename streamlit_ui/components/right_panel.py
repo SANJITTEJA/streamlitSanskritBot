@@ -8,8 +8,14 @@ from streamlit_ui.components.results_display import render_results_display
 
 
 def render_right_panel():
-    """Render the right panel as a single compact tile"""
+    """Render the right panel with different views based on practice mode"""
     
+    # For word and alphabet modes, render directly
+    if st.session_state.practice_mode in ['word', 'alphabet']:
+        render_practice_section()
+        return
+    
+    # Full shloka mode - show shloka info
     if not st.session_state.current_shloka:
         st.markdown("""
             <div style="text-align: center; padding: 60px 20px; color: #64748b;">
@@ -56,10 +62,10 @@ def render_right_panel():
     
     st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
     
-    # Compact practice section
+    # Practice section
     render_practice_section()
     
-    # Compact results (if any)
+    # Results (if any)
     if st.session_state.analysis_results:
         st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
         render_results_display()

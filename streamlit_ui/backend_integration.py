@@ -116,34 +116,49 @@ class StreamlitBackend:
                     'error': f"Failed to decode audio data: {str(decode_error)}"
                 }
             
-            # Transcribe original audio directly using Groq API
+            # Transcribe original audio with WORD-LEVEL TIMESTAMPS using Groq API
             try:
-                headers = {
-                    'Authorization': f'Bearer {AudioConfig.GROQ_API_KEY}'
-                }
+                from audio.word_timestamp_extractor import get_word_timestamps_from_audio
                 
-                files = {
-                    'file': (f'original.{original_audio_format}', audio_bytes, f'audio/{original_audio_format}'),
-                    'model': (None, AudioConfig.WHISPER_MODEL),
-                    'language': (None, 'hi'),
-                    'response_format': (None, 'json')
-                }
+                # Get word timestamps from the original shloka audio
+                timestamp_result = get_word_timestamps_from_audio(audio_bytes, original_audio_format)
                 
-                response = requests.post(
-                    AudioConfig.GROQ_API_URL,
-                    headers=headers,
-                    files=files,
-                    timeout=30
-                )
-                
-                if response.status_code == 200:
-                    result = response.json()
-                    original_transcription = result.get('text', '').strip()
+                if timestamp_result.get('success'):
+                    original_transcription = timestamp_result.get('text', '').strip()
+                    # Store word timestamps in session state for later use
+                    import streamlit as st
+                    if 'current_shloka' in st.session_state and st.session_state.current_shloka:
+                        st.session_state.current_shloka['word_timestamps'] = timestamp_result.get('words', [])
+                        print(f"✓ Stored {len(timestamp_result.get('words', []))} word timestamps")
                 else:
-                    return {
-                        'success': False,
-                        'error': f"Failed to transcribe original audio: HTTP {response.status_code}"
+                    # Fallback to simple transcription
+                    headers = {
+                        'Authorization': f'Bearer {AudioConfig.GROQ_API_KEY}'
                     }
+                    
+                    files = {
+                        'file': (f'original.{original_audio_format}', audio_bytes, f'audio/{original_audio_format}'),
+                        'model': (None, AudioConfig.WHISPER_MODEL),
+                        'language': (None, 'hi'),
+                        'response_format': (None, 'json')
+                    }
+                    
+                    response = requests.post(
+                        AudioConfig.GROQ_API_URL,
+                        headers=headers,
+                        files=files,
+                        timeout=30
+                    )
+                    
+                    if response.status_code == 200:
+                        result = response.json()
+                        original_transcription = result.get('text', '').strip()
+                    else:
+                        return {
+                            'success': False,
+                            'error': f"Failed to transcribe original audio: HTTP {response.status_code}"
+                        }
+                    
             except Exception as transcribe_error:
                 return {
                     'success': False,
@@ -215,6 +230,24 @@ class StreamlitBackend:
                 
                 # Ensure success flag
                 analysis_result['success'] = True
+            
+            # Record individual word attempts if word_tracker exists in session
+            import streamlit as st
+            if hasattr(st, 'session_state') and 'word_tracker' in st.session_state:
+                word_tracker = st.session_state.word_tracker
+                
+                # Record each incorrect word attempt
+                for word_result in word_results:
+                    if word_result.get('original') and not word_result.get('correct'):
+                        word_key = word_result.get('original', '')
+                        user_word = word_result.get('user', '')
+                        
+                        # Calculate individual word accuracy
+                        word_similarity = text_processor.calculate_similarity(word_key, user_word)
+                        word_accuracy = word_similarity * 100
+                        
+                        # Record the attempt
+                        word_tracker.record_word_attempt(word_key, word_accuracy, user_word)
             
             return analysis_result
         

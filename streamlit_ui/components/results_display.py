@@ -1,6 +1,6 @@
 """
 Results Display Component
-Compact analysis results
+Compact analysis results with word practice selection
 """
 import streamlit as st
 
@@ -37,18 +37,50 @@ def render_results_display():
         </div>
     """, unsafe_allow_html=True)
     
-    # Compact incorrect words (if any)
+    # Compact incorrect words (if any) with selection option
     if results.get('incorrect_words'):
-        with st.expander("🎯 Words to Practice", expanded=False):
-            for word in results['incorrect_words']:
-                st.markdown(f"""
-                    <div style="font-size: 0.9rem; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <span style="color: #f1f5f9; font-weight: bold;">{word.get('devanagari', word.get('original', ''))}</span><br/>
-                        <span style="color: #94a3b8; font-size: 0.85rem;">
-                            Expected: {word.get('slp1', word.get('original', ''))} | You said: {word.get('user', '')}
-                        </span>
-                    </div>
-                """, unsafe_allow_html=True)
+        with st.expander("🎯 Words to Practice", expanded=True):
+            st.markdown("**Select words you'd like to practice individually:**")
+            
+            selected_words = []
+            
+            for i, word in enumerate(results['incorrect_words']):
+                word_key = word.get('devanagari', word.get('original', ''))
+                slp1 = word.get('slp1', word.get('original', ''))
+                user_said = word.get('user', '')
+                
+                col1, col2 = st.columns([4, 1])
+                
+                with col1:
+                    st.markdown(f"""
+                        <div style="font-size: 0.9rem; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: #f1f5f9; font-weight: bold;">{word_key}</span><br/>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">
+                                Expected: {slp1} | You said: {user_said}
+                            </span>
+                        </div>
+                    """, unsafe_allow_html=True)
+                
+                with col2:
+                    if st.checkbox("✓", key=f"select_word_{i}", value=True, label_visibility="collapsed"):
+                        selected_words.append(word)
+            
+            # Practice button
+            if selected_words:
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    if st.button("🎯 Practice Selected Words", type="primary", use_container_width=True):
+                        st.session_state.words_to_practice = selected_words
+                        st.session_state.current_word_practice_index = 0
+                        st.session_state.practice_mode = 'word'
+                        st.session_state.word_practice_result = None
+                        st.rerun()
+                
+                with col2:
+                    if st.button("🔤 Alphabet Practice", type="secondary", use_container_width=True):
+                        st.session_state.practice_mode = 'alphabet'
+                        st.rerun()
     
     # Compact LLM feedback
     if results.get('llm_feedback'):
@@ -83,3 +115,4 @@ def render_results_display():
                             • {tip}
                         </div>
                     """, unsafe_allow_html=True)
+

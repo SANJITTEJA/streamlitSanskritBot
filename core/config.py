@@ -54,14 +54,15 @@ class AudioConfig:
     QUIET_AUDIO_THRESHOLD = 0.001
     LOUD_AUDIO_THRESHOLD = 0.01
     
-    # Groq API configuration - Read from Streamlit secrets if available
+    # Groq API configuration - Read from Streamlit secrets or environment variable
+    import os
     if HAS_STREAMLIT:
         try:
             GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
         except:
-            GROQ_API_KEY = "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"
+            GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
     else:
-        GROQ_API_KEY = "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"
+        GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
     
     GROQ_API_URL = "https://api.groq.com/openai/v1/audio/transcriptions"
     WHISPER_MODEL = "whisper-large-v3-turbo"
@@ -79,10 +80,10 @@ class AnalysisConfig:
         try:
             GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
         except:
-            GEMINI_API_KEY = "AIzaSyBCyh3kVJIcBMbS_5LdIS12MR3BIPbA7lM"
+            GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
     else:
-        GEMINI_API_KEY = "AIzaSyBCyh3kVJIcBMbS_5LdIS12MR3BIPbA7lM"
-    
+        GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
+    # GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
     GEMINI_MODEL = "gemini-2.5-flash"  # Use the newer model with better quotas
     USE_LLM_FEEDBACK = True
     LLM_FEEDBACK_RETRY_LIMIT = 2
@@ -101,10 +102,14 @@ class PracticeConfig:
     
     # Word practice settings
     MAX_ATTEMPTS_BEFORE_SUGGESTION = 5
-    DECREASING_ACCURACY_THRESHOLD = 3  # Number of consecutive decreasing scores
+    DECREASING_ACCURACY_THRESHOLD = 5  # Number of consecutive decreasing scores before suggesting alternatives
     
     # Alphabet practice settings
     ALPHABET_COMPLETION_THRESHOLD = 80.0  # Minimum accuracy to complete alphabet practice
+    
+    # Word-level practice thresholds
+    WORD_ACCURACY_THRESHOLD = 60.0  # Minimum accuracy for individual word to be considered "correct"
+    MINIMUM_ATTEMPTS_FOR_SUGGESTION = 3  # Minimum attempts before suggesting alphabet practice
 
 
 # Sanskrit language constants

@@ -16,6 +16,7 @@ from streamlit_ui.config import StreamlitConfig
 from streamlit_ui.components.header import render_header
 from streamlit_ui.components.left_panel import render_left_panel
 from streamlit_ui.components.right_panel import render_right_panel
+from streamlit_ui.components.advanced_chanting import render_advanced_chanting
 from core.config import AppConfig
 
 
@@ -43,10 +44,44 @@ def initialize_session_state():
         st.session_state.analysis_results = None
     
     if 'practice_mode' not in st.session_state:
-        st.session_state.practice_mode = 'full'
+        st.session_state.practice_mode = 'full'  # 'full', 'word', or 'alphabet'
     
     if 'current_word_index' not in st.session_state:
         st.session_state.current_word_index = 0
+    
+    # Word practice tracking
+    if 'word_tracker' not in st.session_state:
+        from tracking.word_practice_tracker import WordPracticeTracker
+        st.session_state.word_tracker = WordPracticeTracker()
+    
+    if 'words_to_practice' not in st.session_state:
+        st.session_state.words_to_practice = []
+    
+    if 'current_word_practice_index' not in st.session_state:
+        st.session_state.current_word_practice_index = 0
+    
+    if 'word_practice_result' not in st.session_state:
+        st.session_state.word_practice_result = None
+    
+    if 'show_suggestion' not in st.session_state:
+        st.session_state.show_suggestion = False
+    
+    # Alphabet practice
+    if 'alphabet_category' not in st.session_state:
+        st.session_state.alphabet_category = 'vowels'
+    
+    if 'alphabet_index' not in st.session_state:
+        st.session_state.alphabet_index = 0
+    
+    if 'alphabet_scores' not in st.session_state:
+        st.session_state.alphabet_scores = {}
+    
+    if 'alphabet_result' not in st.session_state:
+        st.session_state.alphabet_result = None
+    
+    # App mode - 'main' or 'advanced'
+    if 'app_mode' not in st.session_state:
+        st.session_state.app_mode = 'main'
 
 
 def apply_custom_css():
@@ -393,17 +428,36 @@ def main():
     # Apply custom CSS
     apply_custom_css()
     
-    # Render header
+    # Check which mode we're in
+    if st.session_state.app_mode == 'advanced':
+        # Render advanced chanting analysis page
+        render_advanced_chanting()
+    else:
+        # Render header with navigation
+        render_header_with_nav()
+        
+        # Create two-column layout
+        col1, col2 = st.columns([1, 2])
+        
+        with col1:
+            render_left_panel()
+        
+        with col2:
+            render_right_panel()
+
+
+def render_header_with_nav():
+    """Render header with Advanced Analysis navigation button"""
+    # Navigation button at top right
+    col_title, col_nav = st.columns([4, 1])
+    
+    with col_nav:
+        if st.button("🎵 Advanced", type="secondary", help="Advanced Meter & Pitch Analysis"):
+            st.session_state.app_mode = 'advanced'
+            st.rerun()
+    
+    # Original header
     render_header()
-    
-    # Create two-column layout
-    col1, col2 = st.columns([1, 2])
-    
-    with col1:
-        render_left_panel()
-    
-    with col2:
-        render_right_panel()
 
 
 if __name__ == "__main__":
