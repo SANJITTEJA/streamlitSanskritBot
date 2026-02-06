@@ -3,6 +3,11 @@ Configuration module for Sanskrit Voice Bot v2
 Contains all application settings, constants, and configuration values.
 """
 from pathlib import Path
+import os
+
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 # Try to import streamlit for secrets (deployment)
 try:
@@ -54,8 +59,7 @@ class AudioConfig:
     QUIET_AUDIO_THRESHOLD = 0.001
     LOUD_AUDIO_THRESHOLD = 0.01
     
-    # Groq API configuration - Read from Streamlit secrets or environment variable
-    import os
+    # Groq API configuration - Read from .env, Streamlit secrets, or environment variable
     if HAS_STREAMLIT:
         try:
             GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
