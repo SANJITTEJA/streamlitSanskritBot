@@ -79,15 +79,18 @@ class AnalysisConfig:
     WORD_SIMILARITY_THRESHOLD = 0.7
     PASSING_ACCURACY = 70.0
     
-    # LLM Feedback settings - Read from Streamlit secrets if available
+    # LLM Feedback settings - Read from Streamlit secrets or environment variables
+    GEMINI_API_KEY = None
     if HAS_STREAMLIT:
         try:
-            GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+            GEMINI_API_KEY = st.secrets.get("GEMINI_API_KEY")
         except:
-            GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
-    else:
-        GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
-    # GEMINI_API_KEY = "AIzaSyCmbwI9zbFy9b4iiUNVjQzEkmyL9drOoBA"
+            pass
+    
+    # Fallback to environment variable for local development
+    if not GEMINI_API_KEY:
+        GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    
     GEMINI_MODEL = "gemini-2.5-flash"  # Use the newer model with better quotas
     USE_LLM_FEEDBACK = True
     LLM_FEEDBACK_RETRY_LIMIT = 2

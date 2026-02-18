@@ -3,7 +3,6 @@ Word Timestamp Extraction using Whisper API
 Gets actual word-level timestamps from audio using verbose_json response
 """
 import requests
-import base64
 from typing import Dict, List, Optional, Any
 from core.config import AudioConfig
 

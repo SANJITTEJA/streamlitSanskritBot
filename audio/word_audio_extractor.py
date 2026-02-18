@@ -5,8 +5,6 @@ Uses REAL word timestamps from Whisper API
 """
 import numpy as np
 import scipy.io.wavfile as wav
-import tempfile
-from pathlib import Path
 from typing import Dict, Tuple, Optional, List
 import base64
 import io

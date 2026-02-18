@@ -3,7 +3,7 @@ Simplified Feedback Generator for Sanskrit Voice Bot v2
 Uses Gemini directly for AI-powered feedback
 """
 try:
-    import google.generativeai as genai
+    from google import genai
     GENAI_AVAILABLE = True
 except ImportError:
     genai = None
@@ -17,7 +17,8 @@ class FeedbackGenerator:
     """Simple feedback generator using Gemini LLM"""
     
     def __init__(self):
-        self.model = None
+        self.client = None
+        self.model_name = None
         self.initialized = False
         self._try_initialize()
     
@@ -27,8 +28,8 @@ class FeedbackGenerator:
             return False
         try:
             if AnalysisConfig.GEMINI_API_KEY:
-                genai.configure(api_key=AnalysisConfig.GEMINI_API_KEY)
-                self.model = genai.GenerativeModel(AnalysisConfig.GEMINI_MODEL)
+                self.client = genai.Client(api_key=AnalysisConfig.GEMINI_API_KEY)
+                self.model_name = AnalysisConfig.GEMINI_MODEL
                 self.initialized = True
                 return True
         except Exception as e:
@@ -65,7 +66,10 @@ TIPS: [2-3 lines about their oral positioning and breathing techniques]
 
 Keep it concise and supportive."""
 
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt
+            )
             
             if response and hasattr(response, 'text'):
                 return self._parse_response(response.text, accuracy)

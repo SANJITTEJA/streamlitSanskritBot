@@ -3,8 +3,6 @@ Left Panel Component for Streamlit UI
 Contains speaker and shloka selection
 """
 import streamlit as st
-from pathlib import Path
-from core.config import AppConfig
 from database.db_manager import get_db_manager
 
 
@@ -47,10 +45,17 @@ def render_left_panel():
         st.error("No speakers found in database. Please run the data migration script.")
         return
     
+    # Format speaker ID (sp001) to display name (Speaker 1)
+    def format_speaker_name(idx):
+        speaker_id = speaker_list[idx]
+        # Extract number from sp001, sp002, etc.
+        num = int(speaker_id.replace('sp', ''))
+        return f"Speaker {num}"
+    
     selected_speaker_index = st.selectbox(
         "Choose a speaker",
         options=range(len(speaker_list)),
-        format_func=lambda x: speaker_list[x],
+        format_func=format_speaker_name,
         key='speaker_selectbox',
         label_visibility="collapsed"
     )

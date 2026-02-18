@@ -3,7 +3,7 @@ Word Practice Tracker for Sanskrit Voice Bot v2
 Tracks user performance on word practice and provides intelligent suggestions.
 """
 import time
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 import sys
 from pathlib import Path
